@@ -44,6 +44,7 @@ services:
 
   mysql:
     image: mysql:5.7
+    platform: linux/x86_64
     volumes:
       - ./volume/jagoga-mysql-volume:/var/lib/mysql
     restart: always
