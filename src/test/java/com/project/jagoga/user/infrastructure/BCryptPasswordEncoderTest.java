@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class BCryptPasswordEncoderTest {
@@ -19,12 +20,13 @@ class BCryptPasswordEncoderTest {
     @DisplayName("BCrypt 암호화 테스트")
     public void bCrypt() {
         // given
-        String string1 = "abcde";
+        String originalString = "abcde";
 
         // when
-        String string2 = bCryptPasswordEncoder.encrypt(string1);
+        String encryptedString = bCryptPasswordEncoder.encrypt(originalString);
 
         // then
-        assertNotEquals(string1, string2);
+        assertNotEquals(originalString, encryptedString);
+        assertThat(originalString).isNotEqualTo(encryptedString);
     }
 }

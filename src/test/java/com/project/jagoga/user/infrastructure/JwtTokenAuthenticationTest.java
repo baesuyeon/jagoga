@@ -1,54 +1,54 @@
 package com.project.jagoga.user.infrastructure;
 
 import com.project.jagoga.exception.user.UnAuthorizedException;
-import com.project.jagoga.user.application.impl.UserServiceImpl;
 import com.project.jagoga.user.domain.PasswordEncoder;
+import com.project.jagoga.user.domain.User;
 import com.project.jagoga.user.domain.UserRepository;
 import com.project.jagoga.user.presentation.dto.request.LoginRequestDto;
-import com.project.jagoga.user.presentation.dto.request.UserCreateRequestDto;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class JwtTokenAuthenticationTest {
 
-    UserRepository userRepository = new MemoryUserRepository();
+    UserRepository userRepository = mock(UserRepository.class);
+
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    UserServiceImpl userService = new UserServiceImpl(userRepository, passwordEncoder);
-    JwtTokenAuthentication jwtTokenAuthentication = new JwtTokenAuthentication("testSecretKey", userRepository, passwordEncoder);
 
-    String email;
-    String name;
-    String phone;
-    String password;
-    UserCreateRequestDto userCreateRequestDto;
+    JwtTokenAuthentication jwtTokenAuthentication =
+            new JwtTokenAuthentication("testSecretKey", userRepository, passwordEncoder);
 
-    @BeforeEach
-    public void init() {
-        email = "verifyNormalToken@test";
-        name = "testname";
-        password = "@Aabcdef";
-        phone = "010-1234-1234";
-        userCreateRequestDto = new UserCreateRequestDto(email, name, password, phone);
+    static String email = "verifyNormalToken@test";
+    static String password = "@Aabcdef";
+
+    public User createFoundUser() {
+        String name = "testname";
+        String phone = "010-1234-1234";
+        return User.createInstance(email, name, passwordEncoder.encrypt(password), phone);
     }
 
     @Test
     @DisplayName("로그인 이후에 발행 된 정상토큰에 대한 검증")
-    public void verifyNormalToken() {
+    public void verify_NormalToken_afterLogin() {
+        // given
+        when(userRepository.getByEmail(email)).thenReturn(Optional.of(createFoundUser()));
+
         // when
-        userService.signUp(userCreateRequestDto);
-        String normalToken = jwtTokenAuthentication.login(new LoginRequestDto(email, password));
+        String token = jwtTokenAuthentication.login(new LoginRequestDto(email, password));
 
         // then
-        jwtTokenAuthentication.verifyLogin(normalToken);
+        jwtTokenAuthentication.verifyLogin(token);
     }
 
     @Test
     @DisplayName("비정상 토큰에 대한 검증시 예외발생")
-    public void verifyAbnormalToken() {
+    public void should_Fail_AbnormalToken() {
         // when
         String abnormalToken = "abnormalToken";
         Exception exception = assertThrows(UnAuthorizedException.class,
@@ -60,7 +60,7 @@ class JwtTokenAuthenticationTest {
 
     @Test
     @DisplayName("null 토큰에 대한 검증시 예외발생")
-    public void verifyNullToken() {
+    public void should_Fail_NullToken() {
         // when
         String nullToken = null;
         Exception exception = assertThrows(UnAuthorizedException.class,
