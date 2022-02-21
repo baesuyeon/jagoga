@@ -5,7 +5,7 @@ import com.project.jagoga.exception.accommodation.UnknownAccommodationTypeExcept
 import java.util.stream.Stream;
 
 public enum AccommodationType {
-    PENSION;
+    PENSION, HOTEL;
 
     @JsonCreator
     public static AccommodationType forValue(String accommodationValue) {

@@ -9,6 +9,7 @@ import com.project.jagoga.accommodation.presentation.dto.AccommodationResponseDt
 
 import javax.validation.Valid;
 
+import com.project.jagoga.accommodation.presentation.dto.AccommodationUpdateRequestDto;
 import com.project.jagoga.exception.dto.ApiResponse;
 import com.project.jagoga.user.domain.AuthUser;
 import com.project.jagoga.user.domain.LoginCheck;
@@ -46,11 +47,11 @@ public class AccommodationController {
     @PutMapping("/{accommodationId}")
     public ApiResponse<AccommodationResponseDto> updateAccommodation(
         @PathVariable long accommodationId,
-        @Valid @RequestBody final AccommodationRequestDto accommodationRequestDto,
+        @Valid @RequestBody final AccommodationUpdateRequestDto accommodationUpdateRequestDto,
         @RequireLoginUser AuthUser loginUser
     ) {
         Accommodation accommodation =
-            accommodationService.updateAccommodation(accommodationId, accommodationRequestDto, loginUser);
+            accommodationService.updateAccommodation(accommodationId, accommodationUpdateRequestDto, loginUser);
         return ApiResponse.createSuccess(AccommodationResponseDto.of(accommodation));
     }
 

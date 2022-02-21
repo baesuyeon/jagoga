@@ -6,11 +6,13 @@ import com.project.jagoga.accommodation.domain.address.City;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import lombok.Builder;
-import lombok.Getter;
+
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Builder
 public class AccommodationRequestDto {
 
@@ -30,20 +32,7 @@ public class AccommodationRequestDto {
 
     private String description;
     private String information;
-
-    protected AccommodationRequestDto() {
-    }
-
-    public AccommodationRequestDto(String accommodationName, String phoneNumber,
-                                   City city, AccommodationType accommodationType, String description,
-                                   String information) {
-        this.accommodationName = accommodationName;
-        this.phoneNumber = phoneNumber;
-        this.city = city;
-        this.accommodationType = accommodationType;
-        this.description = description;
-        this.information = information;
-    }
+    private int lowPrice;
 
     public Accommodation toEntity(long ownerId) {
         return Accommodation.builder()
@@ -54,6 +43,7 @@ public class AccommodationRequestDto {
             .accommodationType(accommodationType)
             .description(description)
             .information(information)
+            .lowPrice(lowPrice)
             .build();
     }
 }

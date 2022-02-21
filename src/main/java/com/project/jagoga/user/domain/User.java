@@ -71,13 +71,4 @@ public class User extends BaseTimeEntity {
         this.phone = phone;
         this.role = role;
     }
-
-    private User(long id, String email, String name, String password, String phone, Role role) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.password = password;
-        this.phone = phone;
-        this.role = role;
-    }
 }
