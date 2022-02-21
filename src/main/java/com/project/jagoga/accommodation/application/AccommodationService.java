@@ -3,6 +3,7 @@ package com.project.jagoga.accommodation.application;
 import com.project.jagoga.accommodation.domain.Accommodation;
 import com.project.jagoga.accommodation.domain.AccommodationRepository;
 import com.project.jagoga.accommodation.presentation.dto.AccommodationRequestDto;
+import com.project.jagoga.accommodation.presentation.dto.AccommodationUpdateRequestDto;
 import com.project.jagoga.exception.accommodation.DuplicatedAccommodationException;
 import com.project.jagoga.exception.accommodation.NotExistAccommodationException;
 import com.project.jagoga.user.domain.AuthUser;
@@ -28,21 +29,22 @@ public class AccommodationService {
 
     public Accommodation updateAccommodation(
         long accommodationId,
-        AccommodationRequestDto accommodationRequestDto,
+        AccommodationUpdateRequestDto accommodationUpdateRequestDto,
         AuthUser loginUser
     ) {
         Accommodation accommodation = accommodationRepository.findById(accommodationId)
             .orElseThrow(NotExistAccommodationException::new);
         long ownerId = accommodation.getOwnerId();
         VerificationUtils.verifyOwnerPermission(loginUser, ownerId);
-        Accommodation updatedAccommodation = accommodation.update(
-            accommodationRequestDto.getAccommodationName(),
-            accommodationRequestDto.getPhoneNumber(),
-            accommodationRequestDto.getCity().getId(),
-            accommodationRequestDto.getAccommodationType(),
-            accommodationRequestDto.getAccommodationName(),
-            accommodationRequestDto.getInformation());
-        return accommodationRepository.update(updatedAccommodation);
+
+        accommodation.update(
+                accommodationUpdateRequestDto.getPhoneNumber(),
+                accommodationUpdateRequestDto.getCity().getId(),
+                accommodationUpdateRequestDto.getAccommodationType(),
+                accommodationUpdateRequestDto.getDescription(),
+                accommodationUpdateRequestDto.getInformation(),
+                accommodationUpdateRequestDto.getLowPrice());
+        return accommodation;
     }
 
     public Long deleteAccommodation(long accommodationId, AuthUser loginUser) {

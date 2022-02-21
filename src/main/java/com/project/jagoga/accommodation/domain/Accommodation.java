@@ -51,17 +51,13 @@ public class Accommodation extends BaseTimeEntity {
         this.id = id;
     }
 
-    public Accommodation update(String accommodationName, String phoneNumber,
-                                long cityId, AccommodationType accommodationType,
-                                String description, String information) {
-        return Accommodation.builder()
-            .id(this.getId())
-            .accommodationName(accommodationName)
-            .phoneNumber(phoneNumber)
-            .cityId(cityId)
-            .accommodationType(accommodationType)
-            .description(description)
-            .information(information)
-            .build();
+    public void update(String phoneNumber, long cityId, AccommodationType accommodationType,
+                                String description, String information, int lowPrice) {
+        this.phoneNumber = phoneNumber;
+        this.cityId = cityId;
+        this.accommodationType = accommodationType;
+        this.description = description;
+        this.information = information;
+        this.lowPrice = lowPrice;
     }
 }
