@@ -29,9 +29,7 @@ public class BookingRequestDto {
     }
 
     public boolean isValidPeriod() {
-        if (checkInDate == null || checkOutDate == null) {
-            return false;
-        }
+        if(checkInDate.isBefore(LocalDate.now())) return false;
 
         return checkOutDate.isAfter(checkInDate);
     }

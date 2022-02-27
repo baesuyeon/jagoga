@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BookingPeriod {
 
-    String message() default "기간이 유효하지 않습니다.";
+    String message() default "유효하지 않은 기간입니다.";
 
     Class<?>[] groups() default {};
 
