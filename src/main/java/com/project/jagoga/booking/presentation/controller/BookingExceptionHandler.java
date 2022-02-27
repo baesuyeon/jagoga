@@ -1,5 +1,6 @@
 package com.project.jagoga.booking.presentation.controller;
 
+import com.project.jagoga.exception.booking.NonBookableException;
 import com.project.jagoga.exception.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,5 +15,10 @@ public class BookingExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<?>> handleValidationExceptions(BindingResult bindingResult) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.createFail(bindingResult));
+    }
+
+    @ExceptionHandler(NonBookableException.class)
+    public ResponseEntity<ApiResponse<?>> handleNonBookableExceptionExceptions(RuntimeException exception) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.createError(exception.getMessage()));
     }
 }
